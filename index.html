@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>International Arab Boxing Federation</title>
+  <style>
+    :root {
+      --primary: #c8a45c;
+      --dark: #1a1a1a;
+      --light: #f5f5f5;
+      --accent: #d92b2b;
+      --secondary: #2b4d7e;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: var(--light);
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+    
+    .hero {
+      height: 100vh;
+      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/api/placeholder/1200/800') center/cover no-repeat;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-align: center;
+      position: relative;
+    }
+    
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 150px;
+      background: linear-gradient(to top, var(--light), transparent);
+    }
+    
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 20px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      transition: 0.5s;
+    }
+    
+    .navbar.scrolled {
+      background-color: var(--dark);
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      padding: 15px 50px;
+    }
+    
+    .logo {
+      font-size: 28px;
+      font-weight: 700;
+      color: white;
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo span {
+      color: var(--primary);
+    }
+    
+    .nav-links {
+      display: flex;
+      list-style: none;
+    }
+    
+    .nav-links li {
+      margin: 0 15px;
+    }
+    
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.3s;
+      position: relative;
+      padding: 5px 0;
+    }
+    
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+    
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      background-color: var(--primary);
+      left: 0;
+      bottom: 0;
+      transition: 0.3s;
+    }
+    
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+    
+    .hero-content {
+      max-width: 800px;
+      padding: 0 20px;
+      z-index: 1;
+    }
+    
+    .hero-title {
+      font-size: 72px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      line-height: 1.1;
+    }
+    
+    .hero-subtitle {
+      font-size: 24px;
+      margin-bottom: 30px;
+      opacity: 0.9;
+    }
+    
+    .cta-button {
+      display: inline-block;
+      padding: 15px 30px;
+      background-color: var(--primary);
+      color: var(--dark);
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 5px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: 0.3s;
+      margin: 10px;
+    }
+    
+    .cta-button:hover {
+      background-color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .cta-button.secondary {
+      background-color: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+    }
+    
+    .cta-button.secondary:hover {
+      background-color: var(--primary);
+      color: var(--dark);
+    }
+    
+    section {
+      padding: 100px 50px;
+    }
+    
+    .section-title {
+      font-size: 48px;
+      text-align: center;
+      margin-bottom: 60px;
+      position: relative;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      width: 100px;
+      height: 3px;
+      background-color: var(--primary);
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    .championship {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      margin-bottom: 50px;
+    }
+    
+    .championship-header {
+      background-color: var(--secondary);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+    
+    .championship-title {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+    
+    .championship-date {
+      font-size: 18px;
+      opacity: 0.8;
+    }
+    
+    .championship-content {
+      padding: 40px;
+    }
+    
+    .weight-category {
+      margin-bottom: 50px;
+    }
+    
+    .category-title {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: var(--secondary);
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    
+    .medalist {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+      transition: 0.3s;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    
+    .medalist:hover {
+      background-color: #f9f9f9;
+      transform: translateX(5px);
+    }
+    
+    .medal {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      margin-right: 20px;
+      flex-shrink: 0;
+    }
+    
+    .gold {
+      background: linear-gradient(45deg, #FFD700, #FFC107);
+      color: var(--dark);
+      box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+    }
+    
+    .silver {
+      background: linear-gradient(45deg, #C0C0C0, #E0E0E0);
+      color: var(--dark);
+      box-shadow: 0 5px 15px rgba(192, 192, 192, 0.3);
+    }
+    
+    .bronze {
+      background: linear-gradient(45deg, #CD7F32, #D2691E);
+      color: white;
+      box-shadow: 0 5px 15px rgba(205, 127, 50, 0.3);
+    }
+    
+    .athlete-name {
+      font-weight: 600;
+      font-size: 18px;
+    }
+    
+    .athlete-country {
+      font-size: 14px;
+      color: #777;
+      margin-top: 5px;
+    }
+    
+    .champion {
+      background-color: rgba(255, 215, 0, 0.05);
+      border-left: 3px solid var(--primary);
+    }
+    
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 30px;
+    }
+    
+    .news-card {
+      background-color: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      transition: 0.3s;
+    }
+    
+    .news-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .news-image {
+      height: 200px;
+      overflow: hidden;
+    }
+    
+    .news-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: 0.5s;
+    }
+    
+    .news-card:hover .news-image img {
+      transform: scale(1.1);
+    }
+    
+    .news-content {
+      padding: 20px;
+    }
+    
+    .news-date {
+      font-size: 14px;
+      color: #777;
+      margin-bottom: 10px;
+    }
+    
+    .news-title {
+      font-size: 20px;
+      margin-bottom: 15px;
+      line-height: 1.3;
+    }
+    
+    .news-excerpt {
+      color: #555;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .read-more {
+      display: inline-block;
+      color: var(--secondary);
+      font-weight: 600;
+      text-decoration: none;
+      position: relative;
+    }
+    
+    .read-more::after {
+      content: '→';
+      margin-left: 5px;
+      transition: 0.3s;
+    }
+    
+    .read-more:hover::after {
+      margin-left: 10px;
+    }
+    
+    footer {
+      background-color: var(--dark);
+      color: white;
+      padding: 50px;
+    }
+    
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .footer-logo {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    
+    .footer-logo span {
+      color: var(--primary);
+    }
+    
+    .footer-text {
+      color: #ccc;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    
+    .footer-title {
+      font-size: 18px;
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    
+    .footer-title::after {
+      content: '';
+      position: absolute;
+      width: 50px;
+      height: 2px;
+      background-color: var(--primary);
+      bottom: 0;
+      left: 0;
+    }
+    
+    .footer-links {
+      list-style: none;
+    }
+    
+    .footer-links li {
+      margin-bottom: 10px;
+    }
+    
+    .footer-links a {
+      color: #ccc;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    
+    .footer-links a:hover {
+      color: var(--primary);
+      padding-left: 5px;
+    }
+    
+    .copyright {
+      text-align: center;
+      padding: 20px;
+      background-color: #111;
+      color: #777;
+      font-size: 14px;
+    }
+    
+    /* Animation classes */
+    .fade-in {
+      animation: fadeIn 1s ease forwards;
+    }
+    
+    .slide-up {
+      animation: slideUp 0.8s ease forwards;
+    }
+    
+    .slide-right {
+      animation: slideRight 0.8s ease forwards;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes slideUp {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    
+    @keyframes slideRight {
+      from { transform: translateX(-50px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 15px 20px;
+      }
+      
+      .navbar.scrolled {
+        padding: 10px 20px;
+      }
+      
+      .nav-links {
+        display: none;
+      }
+      
+      .hero-title {
+        font-size: 48px;
+      }
+      
+      .hero-subtitle {
+        font-size: 18px;
+      }
+      
+      section {
+        padding: 60px 20px;
+      }
+      
+      .section-title {
+        font-size: 36px;
+      }
+      
+      .championship-header {
+        padding: 20px;
+      }
+      
+      .championship-title {
+        font-size: 28px;
+      }
+      
+      .championship-content {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">IABF<span>.</span></div>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#championships">Championships</a></li>
+      <li><a href="#news">News</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+  
+  <section id="home" class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title fade-in">INTERNATIONAL ARAB BOXING FEDERATION</h1>
+      <p class="hero-subtitle slide-up">Uniting Boxing Excellence Across Nations</p>
+      <div>
+        <a href="#championships" class="cta-button slide-right">2025 World Championships</a>
+        <a href="#about" class="cta-button secondary slide-right">Learn More</a>
+      </div>
+    </div>
+  </section>
+  
+  <section id="championships">
+    <h2 class="section-title">World Championships</h2>
+    
+    <div class="championship">
+      <div class="championship-header">
+        <h3 class="championship-title">2025 IABF World Boxing Championships</h3>
+        <p class="championship-date">February 12-26, 2025 • Dubai, United Arab Emirates</p>
+      </div>
+      
+      <div class="championship-content">
+        <div class="weight-category">
+          <h4 class="category-title">Lightweight Division (60kg)</h4>
+          
+          <div class="medalist champion">
+            <div class="medal gold">1</div>
+            <div>
+              <div class="athlete-name">Yusei Fujii</div>
+              <div class="athlete-country">Chiba, Japan</div>
+            </div>
+          </div>
+          
+          <div class="medalist">
+            <div class="medal silver">2</div>
+            <div>
+              <div class="athlete-name">Omar Al-Farsi</div>
+              <div class="athlete-country">Riyadh, Saudi Arabia</div>
+            </div>
+          </div>
+          
+          <div class="medalist">
+            <div class="medal bronze">3</div>
+            <div>
+              <div class="athlete-name">Malik Thompson</div>
+              <div class="athlete-country">Manchester, United Kingdom</div>
+            </div>
+          </div>
+          
+          <div class="medalist">
+            <div class="medal bronze">3</div>
+            <div>
+              <div class="athlete-name">Carlos Rodriguez</div>
+              <div class="athlete-country">Havana, Cuba</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="weight-category">
+          <h4 class="category-title">Welterweight Division (67kg)</h4>
+          
+          <div class="medalist champion">
+            <div class="medal gold">1</div>
+            <div>
+              <div class="athlete-name">Ahmed Hassan</div>
+              <div class="athlete-country">Cairo, Egypt</div>
+            </div>
+          </div>
+          
+          <div class="medalist">
+            <div class="medal silver">2</div>
+            <div>
+              <div class="athlete-name">Viktor Petrov</div>
+              <div class="athlete-country">Moscow, Russia</div>
+            </div>
+          </div>
+          
+          <div class="medalist">
+            <div class="medal bronze">3</div>
+            <div>
+              <div class="athlete-name">James Wilson</div>
+              <div class="athlete-country">New York, USA</div>
+            </div>
+          </div>
+          
+          <div class="medalist">
+            <div class="medal bronze">3</div>
+            <div>
+              <div class="athlete-name">Marco Rossi</div>
+              <div class="athlete-country">Rome, Italy</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section id="news">
+    <h2 class="section-title">Latest News</h2>
+    
+    <div class="news-grid">
+      <div class="news-card">
+        <div class="news-image">
+          <img src="/api/placeholder/400/300" alt="News image">
+        </div>
+        <div class="news-content">
+          <div class="news-date">March 1, 2025</div>
+          <h3 class="news-title">Japan's Yusei Fujii Claims Gold in Stunning Lightweight Final</h3>
+          <p class="news-excerpt">In a thrilling final bout, Japan's rising star Yusei Fujii delivered a masterclass performance to secure gold in the 60kg division at the 2025 IABF World Championships.</p>
+          <a href="#" class="read-more">Read More</a>
+        </div>
+      </div>
+      
+      <div class="news-card">
+        <div class="news-image">
+          <img src="/api/placeholder/400/300" alt="News image">
+        </div>
+        <div class="news-content">
+          <div class="news-date">February 28, 2025</div>
+          <h3 class="news-title">Egypt's Ahmed Hassan Dominates Welterweight Division</h3>
+          <p class="news-excerpt">Local hero Ahmed Hassan thrilled the crowd with an exceptional display of skill and power to claim the welterweight gold medal.</p>
+          <a href="#" class="read-more">Read More</a>
+        </div>
+      </div>
+      
+      <div class="news-card">
+        <div class="news-image">
+          <img src="/api/placeholder/400/300" alt="News image">
+        </div>
+        <div class="news-content">
+          <div class="news-date">February 26, 2025</div>
+          <h3 class="news-title">Dubai Championship Breaks Attendance Records</h3>
+          <p class="news-excerpt">The 2025 IABF World Championships in Dubai has set new attendance records with over 120,000 spectators attending the two-week event.</p>
+          <a href="#" class="read-more">Read More</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <footer>
+    <div class="footer-content">
+      <div>
+        <div class="footer-logo">IABF<span>.</span></div>
+        <p class="footer-text">The International Arab Boxing Federation is dedicated to promoting excellence in boxing across the Arab world and beyond, organizing world-class competitions and developing boxing talent at all levels.</p>
+      </div>
+      
+      <div>
+        <h3 class="footer-title">Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#championships">Championships</a></li>
+          <li><a href="#news">News</a></li>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      
+      <div>
+        <h3 class="footer-title">Resources</h3>
+        <ul class="footer-links">
+          <li><a href="#">Rules & Regulations</a></li>
+          <li><a href="#">Anti-Doping</a></li>
+          <li><a href="#">Rankings</a></li>
+          <li><a href="#">Media Center</a></li>
+          <li><a href="#">Calendar</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="copyright">
+      © 2025 International Arab Boxing Federation. All Rights Reserved.
+    </div>
+  </footer>
+  
+  <script>
+    // Add scrolled class to navbar on scroll
+    window.addEventListener('scroll', () => {
+      const navbar = document.querySelector('.navbar');
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+    
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+    
+    // Reveal animations on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('fade-in');
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    document.querySelectorAll('.championship, .news-card, .section-title').forEach(el => {
+      el.style.opacity = 0;
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>
